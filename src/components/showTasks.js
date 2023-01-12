@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { UpdateTask } from "./updateTask";
 
 function TodoCard({ data, handleEdit, handleDelete }) {
+  // updated
   const { _id, title, description } = data;
 
   return (
@@ -29,19 +30,15 @@ export function ShowTask() {
   const [todo, setTodo] = useState([]);
   const [open, setOpen] = useState(false);
   const [id, setId] = useState("");
-  const [update, setUpdate] = useState(false);
+  const [update, setUpdate] = useState(0);
 
   useEffect(
     function () {
-      axios
-        .get("http://localhost:3000/api/lists")
-        .then((res) => {
-          console.log(res.data);
-          setTodo(res.data);
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
+      async function fetchData() {
+        const { data } = await axios.get("http://localhost:3000/api/tasks");
+        setTodo(data);
+      }
+      fetchData();
     },
     [update]
   );
@@ -53,11 +50,12 @@ export function ShowTask() {
 
   function handleUpdate() {
     console.log("update:", update, !update);
-    setUpdate(!update);
+    setUpdate(update + 1);
+    // window.location.reload();
   }
 
   function handleDelete(e) {
-    axios.delete(`http://localhost:3000/api/lists/${e.target.name}`);
+    axios.delete(`http://localhost:3000/api/tasks/${e.target.name}`);
 
     setTodo((data) => {
       return data.filter((todo) => todo._id !== e.target.name);
@@ -86,6 +84,7 @@ export function ShowTask() {
           ))}
         </ul>
       </section>
+
       {open ? (
         <section className="update-container">
           <div className="update-contents">

@@ -20,7 +20,7 @@ export function CreateTask() {
     };
     console.log(todo);
     axios
-      .post("http://localhost:3000/api/lists", data)
+      .post("http://localhost:3000/api/tasks", data)
       .then((res) => {
         setData({
           title: "",
